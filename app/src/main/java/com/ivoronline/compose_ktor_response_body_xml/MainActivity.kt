@@ -18,6 +18,7 @@ import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.xml.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
 
 //==================================================================
 // MAIN ACTIVITY
@@ -49,7 +50,7 @@ suspend fun callURL() : PersonDTOXML {
   }
 
   //CAL URL
-  val person: PersonDTOXML = client.get("http://192.168.0.102:8080/ReceiveBodyXML").body()
+  val person: PersonDTOXML = client.get("http://192.168.0.108:8080/ReceiveBodyXML").body()
 
   //CLOSE CLIENT
   client.close()
@@ -61,7 +62,11 @@ suspend fun callURL() : PersonDTOXML {
 }
 
 //==================================================================
-// PERSONDTOXML
+// PERSON DTO XML
 //==================================================================
 @Serializable
-data class PersonDTOXML(val id: Int, val name: String, val age: Int)
+data class PersonDTOXML(
+                    val id  : Int,     //Serialize Property into XML Property      (default)
+  @XmlElement(true) val name: String,  //Serialize Property into XML Child Element
+  @XmlElement(true) val age : Int      //Serialize Property into XML Child Element
+)
